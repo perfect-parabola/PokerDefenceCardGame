@@ -30,13 +30,21 @@ class Game():
 
     def see_cards(self):
         for card in self.cards:
+            # if card.get('color') == "red":
+            #     font_color = FontColors.FAIL
+            # elif card.get('color') == "green":
+            #     font_color = FontColors.OKGREEN
+            # else:
+            #     font_color = ""
+            # text = font_color + card.get('number')+FontColors.ENDC
+
             if card.get('color') == "red":
-                font_color = FontColors.FAIL
+                font_color = "[R]"
             elif card.get('color') == "green":
-                font_color = FontColors.OKGREEN
+                font_color = "[G]"
             else:
-                font_color = ""
-            text = font_color + card.get('number')+FontColors.ENDC
+                font_color = "[W]"
+            text = font_color + card.get('number')
 
             if card.get('mutable'):
                 text += "   (O)"
