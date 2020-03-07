@@ -16,17 +16,7 @@ class Game():
     cards = []
 
     def __init__(self):
-        cards = []
-        i=1
-        while i <= 5:
-            color = random.choice(self.colors)
-            number = random.choice(self.numbers)
-            cards.append({
-                'key':i, 'color':color, 'number':number, 'mutable':True
-            })
-            i+=1
-        self.cards = cards
-        self.see_cards()
+        self.init_game()
 
     def see_cards(self):
         for card in self.cards:
@@ -52,17 +42,37 @@ class Game():
                 text += "   (X)"
             print(text)
 
+    def init_game(self):
+        cards = []
+        i = 1
+        while i <= 5:
+            color = random.choice(self.colors)
+            number = random.choice(self.numbers)
+            cards.append({
+                'key': i, 'color': color, 'number': number, 'mutable': True
+            })
+            i += 1
+        self.cards = cards
+
     def change_card(self, key):
-        if key not in [1,2,3,4,5]:
-            print('1~5 사이의 숫자를 넣어주세요.')
-            return
-        if not self.cards[key-1].get('mutable'):
-            print("이미 바꾼 카드입니다.")
-            return
-        self.cards[key-1]['color'] = random.choice(self.colors)
-        self.cards[key-1]['number'] = random.choice(self.numbers)
-        self.cards[key-1]['mutable'] = False
-        self.see_cards()
+        if key not in [0,1,2,3,4]:
+            message = '잘못된 변수 입력'
+            print(message)
+            return {
+                'status':'failed',
+                'message':message
+            }
+        if not self.cards[key].get('mutable'):
+            message = "이미 바꾼 카드입니다."
+            print(message)
+            return {
+                'status':'failed',
+                'message':message
+            }
+        self.cards[key]['color'] = random.choice(self.colors)
+        self.cards[key]['number'] = random.choice(self.numbers)
+        self.cards[key]['mutable'] = False
+        return {'status':'success', 'message':'카드 변경'}
 
 
 
