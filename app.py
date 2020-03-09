@@ -1,7 +1,7 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QAction, qApp, \
-    QGridLayout, QLabel, QWidget,QPushButton, QStatusBar
-from PyQt5.QtGui import QIcon
+    QGridLayout, QLabel, QWidget,QPushButton, QStatusBar, QShortcut
+from PyQt5.QtGui import QIcon, QKeySequence
 from poker_game import Game
 from functools import partial
 
@@ -15,7 +15,9 @@ class PokerGameApp(QWidget):
             "qproperty-alignment: AlignCenter; max-height:30px;"
 
     cardBoxes = []
-    buttons = []
+    buttons = [
+
+    ]
     count = 0
 
     def __init__(self):
@@ -59,15 +61,21 @@ class PokerGameApp(QWidget):
 
     def set_buttons(self):
         for i, card in enumerate(self.game.cards):
-            button = QPushButton("교체", self)
-            button.setCheckable(False)
-            button.clicked.connect(partial(self.change_card, i))
+            self.buttons.append(QPushButton('교체', self))
+            self.buttons[i].setShortcut(str(i + 1))
+            self.buttons[i].setCheckable(False)
+            self.buttons[i].clicked.connect(partial(self.change_card, i))
         #     self.buttons.append(button)
         # for i, button in enumerate(self.buttons):
-            self.grid.addWidget(button, 1, i)
+            self.grid.addWidget(self.buttons[i], 1, i)
+
+    def reload_buttons(self):
+        for i in [0, 1, 2, 3, 4]:
+            self.buttons[i].setEnabled(True)
 
     def set_restartButton(self):
         button = QPushButton("재시작", self)
+        button.setShortcut('R')
         button.clicked.connect(self.restart)
         self.grid.addWidget(button, 2, 0)
 
@@ -86,15 +94,14 @@ class PokerGameApp(QWidget):
         cardBox.setStyleSheet(cardStyle)
         self.grid.addWidget(cardBox, 0, i)
 
-        button = QPushButton("교체", self)
-        button.setCheckable(False)
-        button.setEnabled(False)
-        self.grid.addWidget(button, 1, i)
+        self.buttons[i].setCheckable(False)
+        self.buttons[i].setEnabled(False)
+        # self.grid.addWidget(self.buttons[i], 1, i)
 
     def restart(self):
         self.game.init_game()
         self.set_cardBoxes()
-        self.set_buttons()
+        self.reload_buttons()
 
 if __name__ == '__main__':
    app = QApplication(sys.argv)
